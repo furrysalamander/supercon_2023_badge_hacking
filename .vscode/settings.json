@@ -1,7 +1,15 @@
 {
+    "idf.flashType": "UART",
+    "idf.portWin": "COM6",
     "idf.adapterTargetName": "esp32",
+    "files.associations": {
+        "dac_channel.h": "c",
+        "dac_cosine.h": "c",
+        "math.h": "c",
+        "thread": "cpp"
+    },
     "idf.openOcdConfigs": [
         "interface/ftdi/esp32_devkitj_v1.cfg",
         "target/esp32.cfg"
-    ],
+    ]
 }
