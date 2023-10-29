@@ -1,8 +1,7 @@
 #pragma once
 #include "FastDAC.h"
-class DACGraphics
+namespace DACGraphics
 {
-  public:
   void init()
   {
     dac_output_enable(DAC_CHANNEL_1);
