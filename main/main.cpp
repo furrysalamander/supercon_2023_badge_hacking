@@ -3,39 +3,57 @@
 
 #include <rtc_wdt.h>
 #include <esp_task_wdt.h>
-#include <driver/dac_cosine.h>
 #include <math.h>
 #include <vector>
 #include <array>
 #include <thread>
 
-#include "bitluni/DACGraphics.h"
-#include "bitluni/Mesh.h"
+// #include "bitluni/DACGraphics.h"
+// #include "bitluni/Mesh.h"
 
-void blit(const std::vector<std::array<uint8_t, 4>>& lines) {
-    // May want to replace this with the stanrdard library DAC calls at some point.
-    // it's currently using the oudated driver API.  Maybe the new one isn't as slow.
-    // (thus eliminating the need for the fastdac code)
-    DACGraphics::begin(); 
-    for (const auto &line: lines) {
-        DACGraphics::line(line[0], line[1], line[2], line[3]);
-    }
-    DACGraphics::end();
-}
+#include "dacGraphics.hpp"
+
+// void blit(const std::vector<std::array<uint8_t, 4>>& lines) {
+//     // May want to replace this with the stanrdard library DAC calls at some point.
+//     // it's currently using the oudated driver API.  Maybe the new one isn't as slow.
+//     // (thus eliminating the need for the fastdac code)
+//     DACGraphics::begin(); 
+//     for (const auto &line: lines) {
+//         DACGraphics::line(line[0], line[1], line[2], line[3]);
+//     }
+//     DACGraphics::end();
+// }
 
 extern "C" void app_main(void)
 {
-    DACGraphics::init();
-    std::vector<std::array<uint8_t, 4>> square {
-        {16,16,16,240},
-        {16,240,240,240},
-        {240,240,240,16},
-        {240,16,16,16},
-    };
+    // DACGraphics::init();
+    // std::vector<std::array<uint8_t, 4>> square {
+    //     {16,16,16,240},
+    //     {16,240,240,240},
+    //     {240,240,240,16},
+    //     {240,16,16,16},
+    // };
+
+    const auto samples = 1024;
+
+    
+    auto waves = std::make_unique<std::vector<uint8_t>>();
+    waves->reserve(samples * 2);
+    for (int i = 0; i < samples; i++) {
+        double sin_input = i * M_TWOPI / samples;
+        uint8_t x = (sin(sin_input * 2) + 1.0) * (double)(255 / 2);
+        uint8_t y = (cos(sin_input * 1.2) + 1.0) * (double)(255 / 2);
+        waves->push_back(x);
+        waves->push_back(y);
+        // std::printf("in: %f, x: %d, y: %d\n", sin_input, x, y);
+        // vTaskDelay(1);
+    }
+
+    dac::update_buffer(std::move(waves));
 
     while (true) {
-        for (int i = 0; i < 1e2; i++)
-            blit(square);
-        vTaskDelay(1);
+        // for (int i = 0; i < 1e2; i++)
+        //     blit(square);
+        vTaskDelay(pdMS_TO_TICKS(1000));
     }
 }
