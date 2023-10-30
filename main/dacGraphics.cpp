@@ -21,8 +21,8 @@ namespace dac {
         .chan_mask = DAC_CHANNEL_MASK_ALL,
         .desc_num = 8,
         // I think maybe this is just the max size?  If so, we don't need to re-init the dma stuff every time.
-        .buf_size = data->size(), 
-        .freq_hz = 200000, // frequency at which data is written to the output
+        .buf_size = 4092, 
+        .freq_hz = 1000000, // frequency at which data is written to the output
         .offset = 0,
         .clk_src = DAC_DIGI_CLK_SRC_DEFAULT,
         .chan_mode = DAC_CHANNEL_MODE_ALTER,
