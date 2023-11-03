@@ -2,9 +2,9 @@
 #include <mat.h>
 #include <vector>
 
-class shape {
+class Shape {
 public:
-    std::vector<dspm::Mat> points;
+    std::vector<float> points;
     std::unique_ptr<std::vector<std::array<size_t, 2>>> lines;
 };
 

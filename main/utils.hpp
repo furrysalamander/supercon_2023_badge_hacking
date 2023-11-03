@@ -4,7 +4,6 @@
 template<typename T>
 constexpr std::vector<float> linspace(T start_in, T end_in, int num_in)
 {
-
   std::vector<float> linspaced;
 
   float start = static_cast<float>(start_in);

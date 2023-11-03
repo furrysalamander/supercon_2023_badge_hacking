@@ -1,6 +1,6 @@
 set(srcs 
     "main.cpp"
-    "dacGraphics.cpp"
+    "render.cpp"
 )
 
 idf_component_register(SRCS "${srcs}"
