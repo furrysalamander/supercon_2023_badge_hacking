@@ -11,7 +11,7 @@
 // #include "bitluni/DACGraphics.h"
 // #include "bitluni/Mesh.h"
 
-#include "dacGraphics.hpp"
+#include "render.hpp"
 #include "utils.hpp"
 
 #include "composite.hpp"
@@ -23,19 +23,9 @@
 extern "C" void app_main(void)
 {
     dac::init_dac();
-    // DACGraphics::init();
-    // std::vector<std::array<uint8_t, 4>> square {
-    //     {16,16,16,240},
-    //     {16,240,240,240},
-    //     {240,240,240,16},
-    //     {240,16,16,16},
-    // };
 
     const auto samples = 2048;
     const auto space = linspace(0.0, 10*M_PI, samples);
-    
-    // for (int i = 0; i < samples; i++) {
-        // float sin_input = i * M_TWOPI / (samples / 4);
     
     float t = 0;
     float t2 = 0;
@@ -74,7 +64,6 @@ extern "C" void app_main(void)
         }
 
         dac::update_buffer(std::move(waves));
-
 
         vTaskDelay(pdMS_TO_TICKS(16));
 
