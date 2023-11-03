@@ -14,4 +14,5 @@ namespace comp
 
         return dspm::Mat(matrix, 2, 2);
     }
+
 }
