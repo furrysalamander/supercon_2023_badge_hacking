@@ -20,8 +20,6 @@
 #include "assets.hpp"
 
 
-
-
 extern "C" void app_main(void)
 {
     dac::init_dac();
