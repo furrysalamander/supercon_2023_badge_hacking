@@ -10,7 +10,7 @@ namespace primitives {
             1.0f, -1.0f,
             -1.0f, -1.0f,
         },
-        nullptr
+        {}
         // syntax for initializing non-circular shapes (custom edge list)
         // std::make_unique<std::vector<std::array<size_t, 2>>>(std::vector {0, 1}),
     };

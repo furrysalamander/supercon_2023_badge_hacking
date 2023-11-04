@@ -95,7 +95,8 @@
         "string_view": "cpp",
         "cinttypes": "cpp",
         "bitset": "cpp",
-        "netfwd": "cpp"
+        "netfwd": "cpp",
+        "*.inc": "cpp"
     },
     "idf.openOcdConfigs": [
         "interface/ftdi/esp32_devkitj_v1.cfg",
