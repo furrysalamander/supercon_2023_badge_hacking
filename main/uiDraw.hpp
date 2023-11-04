@@ -16,6 +16,7 @@
 
 #include "render.hpp"
 #include "rasterize.hpp"
+#include "assets.hpp"
 
 namespace UI {
    // Globally available scene

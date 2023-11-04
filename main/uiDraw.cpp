@@ -16,6 +16,9 @@
 
 #include "uiDraw.hpp"
 
+#include <rtc_wdt.h>
+#include <esp_task_wdt.h>
+
 using namespace std;
 
 #define deg2rad(value) ((M_PI / 180) * (value))
@@ -141,7 +144,7 @@ void UI::drawMediumAsteroid( const Point & center, int rotation)
       {}
    };
 
-   UI::scene.emplace_back(asteroid).rotate(rotation);
+   UI::scene.emplace_back(primitives::square).rotate(rotation);
 }
 
 /**********************************************************************
@@ -254,6 +257,8 @@ void UI::display() {
    auto output_coords = rasterize(UI::scene);
 
    dac::update_buffer(std::move(output_coords));
+   
+   vTaskDelay(pdMS_TO_TICKS(16));
 }
 
 /******************************************************************
