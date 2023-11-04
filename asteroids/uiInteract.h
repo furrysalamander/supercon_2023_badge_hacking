@@ -18,7 +18,7 @@
 #define UI_INTERFACE_H
 
  #include "point.h"
- #include "vectorscope.h"
+ #include "buttons.h"
  
 
 /********************************************
@@ -60,7 +60,7 @@ public:
    
    // Key event indicating a key has been pressed or not.  The callbacks
    // should be the only onces to call this
-   void keyEvent(VectorscopeButton key, bool fDown);
+   void keyEvent(Button key, bool fDown);
    void keyEvent();
 
    // Current frame rate

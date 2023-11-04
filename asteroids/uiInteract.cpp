@@ -80,7 +80,7 @@ void drawCallback()
  *   INPUT   key:   the key we pressed according to the GLUT_KEY_ prefix
  *           x y:   the position in the window, which we ignore
  *************************************************************************/
-void keyDownCallback(VectorscopeButton button, int x, int y)
+void keyDownCallback(Button button, int x, int y)
 {
    // Even though this is a local variable, all the members are static
    // so we are actually getting the same version as in the constructor.
@@ -94,7 +94,7 @@ void keyDownCallback(VectorscopeButton button, int x, int y)
  *   INPUT   key:   the key we pressed according to the GLUT_KEY_ prefix
  *           x y:   the position in the window, which we ignore
  *************************************************************************/
-void keyUpCallback(VectorscopeButton button, int x, int y)
+void keyUpCallback(Button button, int x, int y)
 {
    // Even though this is a local variable, all the members are static
    // so we are actually getting the same version as in the constructor.
@@ -107,7 +107,7 @@ void keyUpCallback(VectorscopeButton button, int x, int y)
  * Generic callback to a regular ascii keyboard event, such as
  * the space bar or the letter 'q'
  ***************************************************************/
-void keyboardCallback(VectorscopeButton button, int x, int y)
+void keyboardCallback(Button button, int x, int y)
 {
    // Even though this is a local variable, all the members are static
    // so we are actually getting the same version as in the constructor.
@@ -121,7 +121,7 @@ void keyboardCallback(VectorscopeButton button, int x, int y)
  *   INPUT   key     which key is pressed
  *           fDown   down or brown
  ****************************************************************/
-void Interface::keyEvent(VectorscopeButton button, bool fDown)
+void Interface::keyEvent(Button button, bool fDown)
 {
    switch(button)
    {
