@@ -21,9 +21,9 @@
         {
             "name": "Linux",
             "includePath": [
+                "${workspaceFolder}/**",
                 "${config:idf.espIdfPath}/components/**",
-                "${config:idf.espIdfPathWin}/components/**",
-                "${workspaceFolder}/**"
+                "${config:idf.espIdfPathWin}/components/**"
             ],
             "browse": {
                 "path": [

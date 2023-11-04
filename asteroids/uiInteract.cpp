@@ -32,22 +32,7 @@ using namespace std;
  *********************************************************************/
 void sleep(unsigned long msSleep)
 {
-   // Windows handles sleep one way
-#ifdef _WIN32
-   ::Sleep(msSleep + 35);
-
-   // Unix-based operating systems (OS-X, Linux) do it another
-#else // LINUX, XCODE
-   timespec req = {};
-   time_t sec = (int)(msSleep / 1000);
-   msSleep -= (sec * 1000);
-
-   req.tv_sec = sec;
-   req.tv_nsec = msSleep * 1000000L;
-
-   while (nanosleep(&req, &req) == -1)
-      ;
-#endif // LINUX, XCODE
+   // TODO: find esp32 sleep
    return;
 }
 
@@ -66,8 +51,7 @@ void drawCallback()
    // even though this is a local variable, all the members are static
    Interface ui;
    // Prepare the background buffer for drawing
-   glClear(GL_COLOR_BUFFER_BIT); //clear the screen
-   glColor3f(1,1,1);
+   // TODO: clear the screen? Maybe I don't need to
    
    //calls the client's display function
    assert(ui.callBack != NULL);
@@ -81,7 +65,9 @@ void drawCallback()
    ui.setNextDrawTime();
 
    // bring forth the background buffer
-   glutSwapBuffers();
+   // glutSwapBuffers();
+
+   // TODO: Write buffer out?
 
    // clear the space at the end
    ui.keyEvent();
@@ -94,12 +80,12 @@ void drawCallback()
  *   INPUT   key:   the key we pressed according to the GLUT_KEY_ prefix
  *           x y:   the position in the window, which we ignore
  *************************************************************************/
-void keyDownCallback(int key, int x, int y)
+void keyDownCallback(VectorscopeButton button, int x, int y)
 {
    // Even though this is a local variable, all the members are static
    // so we are actually getting the same version as in the constructor.
    Interface ui;
-   ui.keyEvent(key, true /*fDown*/);
+   ui.keyEvent(button, true /*fDown*/);
 }
 
 /************************************************************************
@@ -108,12 +94,12 @@ void keyDownCallback(int key, int x, int y)
  *   INPUT   key:   the key we pressed according to the GLUT_KEY_ prefix
  *           x y:   the position in the window, which we ignore
  *************************************************************************/
-void keyUpCallback(int key, int x, int y)
+void keyUpCallback(VectorscopeButton button, int x, int y)
 {
    // Even though this is a local variable, all the members are static
    // so we are actually getting the same version as in the constructor.
    Interface ui;
-   ui.keyEvent(key, false /*fDown*/);
+   ui.keyEvent(button, false /*fDown*/);
 }
 
 /***************************************************************
@@ -121,12 +107,12 @@ void keyUpCallback(int key, int x, int y)
  * Generic callback to a regular ascii keyboard event, such as
  * the space bar or the letter 'q'
  ***************************************************************/
-void keyboardCallback(unsigned char key, int x, int y)
+void keyboardCallback(VectorscopeButton button, int x, int y)
 {
    // Even though this is a local variable, all the members are static
    // so we are actually getting the same version as in the constructor.
    Interface ui;
-   ui.keyEvent(key, true /*fDown*/);
+   ui.keyEvent(button, true /*fDown*/);
 }
 
 /***************************************************************
@@ -135,31 +121,32 @@ void keyboardCallback(unsigned char key, int x, int y)
  *   INPUT   key     which key is pressed
  *           fDown   down or brown
  ****************************************************************/
-void Interface::keyEvent(int key, bool fDown)
+void Interface::keyEvent(VectorscopeButton button, bool fDown)
 {
-   switch(key)
+   switch(button)
    {
-      case GLUT_KEY_DOWN:
+      case STICK_UP:
          isDownPress = fDown;
          break;
-      case GLUT_KEY_UP:
+      case STICK_DOWN:
          isUpPress = fDown;
          break;
-      case GLUT_KEY_RIGHT:
+      case STICK_RIGHT:
          isRightPress = fDown;
          break;
-      case GLUT_KEY_LEFT:
+      case STICK_LEFT:
          isLeftPress = fDown;
          break;
-      case GLUT_KEY_F1:
-         isEscapePress = fDown;
+      case LEVEL:
+         isUpPress = fDown;
          break;
-      case GLUT_KEY_HOME:
+      case RANGE:
       case ' ':
          isSpacePress = fDown;
          break;
    }
 }
+
 /***************************************************************
  * INTERFACE : KEY EVENT
  * Either set the up or down event for a given key
@@ -254,31 +241,34 @@ void Interface::initialize(int argc, char ** argv, const char * title, Point top
       return;
    
    // set up the random number generator
-   srand((unsigned int)time(NULL));
+   // srand((unsigned int)time(NULL));
 
-   // create the window
-   glutInit(&argc, argv);
-   Point point;
-   glutInitWindowSize(   // size of the window
-      (int)(bottomRight.getX() - topLeft.getX()),
-      (int)(topLeft.getY() - bottomRight.getY()));
+   // // create the window
+   // glutInit(&argc, argv);
+   // Point point;
+   // glutInitWindowSize(   // size of the window
+   //    (int)(bottomRight.getX() - topLeft.getX()),
+   //    (int)(topLeft.getY() - bottomRight.getY()));
             
-   glutInitWindowPosition( 10, 10);                // initial position 
-   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);  // double buffering
-   glutCreateWindow(title);              // text on titlebar
-   glutIgnoreKeyRepeat(true);
+   // glutInitWindowPosition( 10, 10);                // initial position 
+   // glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);  // double buffering
+   // glutCreateWindow(title);              // text on titlebar
+   // glutIgnoreKeyRepeat(true);
    
-   // set up the drawing style: B/W and 2D
-   glClearColor(0, 0, 0, 0);          // Black is the background color
-   gluOrtho2D((int)topLeft.getX(), (int)bottomRight.getX(),
-              (int)bottomRight.getY(), (int)topLeft.getY()); // 2D environment
+   // // set up the drawing style: B/W and 2D
+   // glClearColor(0, 0, 0, 0);          // Black is the background color
+   // gluOrtho2D((int)topLeft.getX(), (int)bottomRight.getX(),
+   //            (int)bottomRight.getY(), (int)topLeft.getY()); // 2D environment
 
-   // register the callbacks so OpenGL knows how to call us
-   glutDisplayFunc(   drawCallback    );
-   glutIdleFunc(      drawCallback    );
-   glutKeyboardFunc(  keyboardCallback);
-   glutSpecialFunc(   keyDownCallback );
-   glutSpecialUpFunc( keyUpCallback   );
+   // // register the callbacks so OpenGL knows how to call us
+   // glutDisplayFunc(   drawCallback    );
+   // glutIdleFunc(      drawCallback    );
+   // glutKeyboardFunc(  keyboardCallback);
+   // glutSpecialFunc(   keyDownCallback );
+   // glutSpecialUpFunc( keyUpCallback   );
+   
+   // TODO: what to do here instead?
+
    initialized = true;
    
    // done
@@ -302,7 +292,8 @@ void Interface::run(void (*callBack)(const Interface *, void *), void *p)
    this->p = p;
    this->callBack = callBack;
 
-   glutMainLoop();
+   // TODO: Replace glutmainloop with new interface updating loop
+   // glutMainLoop();
 
    return;
 }
