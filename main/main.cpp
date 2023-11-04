@@ -85,6 +85,6 @@ extern "C" void app_main(void)
         // output_coords->push_back(0.0f);
         dac::update_buffer(std::move(output_coords));
 
-        vTaskDelay(pdMS_TO_TICKS(5));
+        vTaskDelay(pdMS_TO_TICKS(10));
     }
 }

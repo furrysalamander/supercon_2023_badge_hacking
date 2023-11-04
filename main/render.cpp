@@ -13,7 +13,8 @@
 namespace dac {
 
 std::unique_ptr<std::vector<std::array<uint8_t, 2>>> data;
-std::mutex data_mutex;
+std::unique_ptr<std::vector<std::array<uint8_t, 2>>> data_real;
+// std::mutex data_mutex;
 
 dac_continuous_handle_t dac_output_handle = nullptr;
 
@@ -58,18 +59,25 @@ void output_coord(std::array<uint8_t, 2> point) {
 
 void update_buffer(std::unique_ptr<std::vector<std::array<uint8_t, 2>>> buffer) {
     // ESP_ERROR_CHECK(dac_continuous_write_cyclically(dac_output_handle, buffer->data(), buffer->size(), NULL));
-    std::unique_lock<std::mutex> lock(data_mutex);
-    data = std::move(buffer);
+    // std::unique_lock<std::mutex> lock(data_mutex);
+    data_real = std::move(buffer);
 }
 
 
 void render_thread() {
     while (true) {
         vTaskDelay(1);
-        std::unique_lock<std::mutex> lock(data_mutex);
-        if (data) {
-            for (const auto& point : *data) {
-                output_coord(point);
+        // std::unique_lock<std::mutex> lock(data_mutex);
+        // if (data) {
+        //     data_real = std::move(data);
+        // }
+        // lock.unlock();
+
+        if (data_real) {
+            for (int i = 0; i < 10; i++) {
+                for (const auto& point : *data_real) {
+                    output_coord(point);
+                }
             }
         }
     }
