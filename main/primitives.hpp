@@ -22,21 +22,15 @@ public:
     // std::shared_ptr<std::vector<std::array<size_t, 2>>> edges;
 
     void rotate(float degrees) {
-        static auto rotation_matrix = dspm::Mat(2, 2);
-        comp::rotation(degrees, rotation_matrix);
-
-        // std::printf("matrix: %f\n", rotation_matrix.data[0]);
+        auto rotation_matrix = comp::rotation(degrees);
 
         for (auto& point: points) {
             point = rotation_matrix * point;
         }
-
-        // std::printf("matrix: %f\n", rotation_matrix.data[0]);
     }
 
     void translate(float x, float y) {
-        static auto translation_matrix = dspm::Mat(2, 1);
-        comp::translation(x, y, translation_matrix);
+        auto translation_matrix = comp::translation(x, y);
 
         for (auto& point: points) {
             point += translation_matrix;
@@ -44,8 +38,7 @@ public:
     }
 
     void scale(float x, float y) {
-        static auto scaling_matrix = dspm::Mat(2, 2);
-        comp::scaling(x, y, scaling_matrix);
+        auto scaling_matrix = comp::scaling(x, y);
 
         for (auto& point: points) {
             point = scaling_matrix * point;

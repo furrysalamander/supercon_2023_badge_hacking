@@ -3,7 +3,9 @@
 
 namespace comp
 {
-    void rotation(float degrees, dspm::Mat& matrix) {
+    dspm::Mat rotation(float degrees) {
+        auto matrix = dspm::Mat(2, 2);
+
         const auto cos_d = cos(degrees);
         const auto sin_d = sin(degrees);
 
@@ -12,16 +14,24 @@ namespace comp
         matrix(1, 0) = sin_d;
         matrix(1, 1) = cos_d;
 
-        return;
+        return matrix;
     }
 
-    void scaling(float x, float y, dspm::Mat& matrix) {
+    dspm::Mat scaling(float x, float y) {
+        auto matrix = dspm::Mat(2, 2);
+
         matrix(0, 0) = x;
         matrix(1, 1) = y;
+
+        return matrix;
     }
 
-    void translation(float x, float y, dspm::Mat& matrix) {
+    dspm::Mat translation(float x, float y) {
+        auto matrix = dspm::Mat(2, 1);
+
         matrix(0, 0) = x;
         matrix(1, 0) = y;
+
+        return matrix;
     }
 }
