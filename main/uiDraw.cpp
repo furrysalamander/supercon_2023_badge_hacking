@@ -12,14 +12,15 @@
 
 #include <cassert>    // I feel the need... the need for asserts
 #include <time.h>     // for clock
+#include <vector>
 
-#include "point.h"
-#include "uiDraw.h"
+#include "uiDraw.hpp"
 
 using namespace std;
 
 #define deg2rad(value) ((M_PI / 180) * (value))
 
+std::vector<Shape> UI::scene = std::vector<Shape>();
 
 /************************************************************************
  * ROTATE
@@ -30,7 +31,7 @@ using namespace std;
  *           rotation Rotation in degrees
  *    OUTPUT point    The new position
  *************************************************************************/
-void rotate(Point & point, const Point & origin, int rotation)
+void UI::rotate(Point & point, const Point & origin, int rotation)
 {
    // because sine and cosine are expensive, we want to call them only once
    double cosA = cos(deg2rad(rotation));
@@ -57,7 +58,7 @@ void rotate(Point & point, const Point & origin, int rotation)
  *    INPUT:   min, max : The number of values (min <= num <= max)
  *    OUTPUT   <return> : Return the integer
  ****************************************************************/
-int random(int min, int max)
+int UI::random(int min, int max)
 {
    assert(min < max);
    int num = (rand() % (max - min)) + min;
@@ -73,7 +74,7 @@ int random(int min, int max)
  *    INPUT:   min, max : The number of values (min <= num <= max)
  *    OUTPUT   <return> : Return the double
  ****************************************************************/
-double random(double min, double max)
+double UI::random(double min, double max)
 {
    assert(min <= max);
    double num = min + ((double)rand() / (double)RAND_MAX * (max - min));
@@ -88,7 +89,7 @@ double random(double min, double max)
  * Draw a single point on the screen, 2 pixels by 2 pixels
  *  INPUT point   The position of the dow
  *************************************************************************/
-void drawDot(const Point & point)
+void UI::drawDot(const Point & point)
 {
    auto x = point.getX();
    auto y = point.getY();
@@ -105,21 +106,17 @@ void drawDot(const Point & point)
 /**********************************************************************
  * DRAW SMALL ASTEROID
  **********************************************************************/
-void drawSmallAsteroid( const Point & center, int rotation)
+void UI::drawSmallAsteroid( const Point & center, int rotation)
 {
    // ultra simple point
-   struct PT
-   {
-      int x;
-      int y;
-   } points[] = 
+   UI::PT points[] = 
    {
       {-5, 9},  {4, 8},   {8, 4},   
       {8, -5},  {-2, -8}, {-2, -3}, 
       {-8, -4}, {-8, 4},  {-5, 10}
    };
    
-   for (int i = 0; i < sizeof(points)/sizeof(PT); i++)
+   for (int i = 0; i < sizeof(points)/sizeof(UI::PT); i++)
    {
       Point pt(center.getX() + points[i].x, 
                center.getY() + points[i].y);
@@ -131,37 +128,29 @@ void drawSmallAsteroid( const Point & center, int rotation)
 /**********************************************************************
  * DRAW MEDIUM ASTEROID
  **********************************************************************/
-void drawMediumAsteroid( const Point & center, int rotation)
+void UI::drawMediumAsteroid( const Point & center, int rotation)
 {
    // ultra simple point
-   struct PT
-   {
-      int x;
-      int y;
-   } points[] = 
-   {
-      {2, 8},    {8, 15},    {12, 8}, 
-      {6, 2},    {12, -6},   {2, -15},
-      {-6, -15}, {-14, -10}, {-15, 0},
-      {-4, 15},  {2, 8}
+   const auto asteroid = Shape {
+      {
+         2, 8,    8, 15,    12, 8, 
+         6, 2,    12, -6,   2, -15,
+         -6, -15, -14, -10, -15, 0,
+         -4, 15,  2, 8
+      },
+      {}
    };
-   
-   for (int i = 0; i < sizeof(points)/sizeof(PT); i++)
-   {
-      Point pt(center.getX() + points[i].x, 
-               center.getY() + points[i].y);
-      rotate(pt, center, rotation);
-      // TODO: insert pt
-   }
+
+   UI::scene.emplace_back(asteroid).rotate(rotation);
 }
 
 /**********************************************************************
  * DRAW LARGE ASTEROID
  **********************************************************************/
-void drawLargeAsteroid( const Point & center, int rotation)
+void UI::drawLargeAsteroid( const Point & center, int rotation)
 {
    // ultra simple point
-   const PT points[] = 
+   const UI::PT points[] = 
    {
       {0, 12},    {8, 20}, {16, 14},
       {10, 12},   {20, 0}, {0, -20},
@@ -169,7 +158,7 @@ void drawLargeAsteroid( const Point & center, int rotation)
       {-10, 20},  {0, 12}
    };
    
-   for (int i = 0; i < sizeof(points)/sizeof(PT); i++)
+   for (int i = 0; i < sizeof(points)/sizeof(UI::PT); i++)
    {
       Point pt(center.getX() + points[i].x, 
                center.getY() + points[i].y);
@@ -178,16 +167,16 @@ void drawLargeAsteroid( const Point & center, int rotation)
    }
 }
 
-void drawFlame(const Point & center, int rotation)
+void UI::drawFlame(const Point & center, int rotation)
 {
-   const PT pointsFlame[3][5] =
+   const UI::PT pointsFlame[3][5] =
    {
       { {-2, -3}, {-2, -13}, { 0, -6}, { 2, -13}, {2, -3} },
       { {-2, -3}, {-4,  -9}, {-1, -7}, { 1, -14}, {2, -3} },
       { {-2, -3}, {-1, -14}, { 1, -7}, { 4,  -9}, {2, -3} }
    };
    
-   int iFlame = random(0, 3);
+   int iFlame = UI::random(0, 3);
    for (int i = 0; i < 5; i++)
    {
       Point pt(center.getX() + pointsFlame[iFlame][i].x, 
@@ -204,16 +193,16 @@ void drawFlame(const Point & center, int rotation)
  *  INPUT point   The position of the ship                                      
  *        angle   Which direction it is ponted                                  
  *************************************************************************/
-void drawShip(const Point & center, int rotation, bool thrust)
+void UI::drawShip(const Point & center, int rotation, bool thrust)
 {
    
    // draw the ship                                                 
-   const PT pointsShip[] = 
+   const UI::PT pointsShip[] = 
    { // top   r.wing   r.engine l.engine  l.wing    top
       {0, 6}, {6, -6}, {2, -3}, {-2, -3}, {-6, -6}, {0, 6}  
    };
    
-   for (int i = 0; i < sizeof(pointsShip)/sizeof(PT); i++)
+   for (int i = 0; i < sizeof(pointsShip)/sizeof(UI::PT); i++)
    {
       Point pt(center.getX() + pointsShip[i].x, 
                center.getY() + pointsShip[i].y);
@@ -224,7 +213,7 @@ void drawShip(const Point & center, int rotation, bool thrust)
    // draw the flame if necessary
    if (thrust)
    {
-      drawFlame(center, rotation);
+      UI::drawFlame(center, rotation);
    }
 }
 
@@ -234,22 +223,15 @@ void drawShip(const Point & center, int rotation, bool thrust)
  *  INPUT point   The position of the ship
  *        angle   Which direction it is ponted
  *************************************************************************/
-void drawXwing(const Point & center, int rotation, bool thrust)
+void UI::drawXwing(const Point & center, int rotation, bool thrust)
 {
-   // ultra simple point
-   struct PT
-   {
-      int x;
-      int y;
-   };
-
-   const PT pointsShip[] =
+   const UI::PT pointsShip[] =
    { // tip >  < right wing  >  < right shooter >  <end right wing>
       {0, 16}, {3, 0}, {10, 0}, {10, 8}, {10, -4}, {7, -4}, {7, -6}, {0, -5},
       {-7, -6}, {-7, -4}, {-10, -4}, {-10, 8}, {-10, 0}, {-3, 0}, {0, 16}
    };
 
-   for (int i = 0; i < sizeof(pointsShip) / sizeof(PT); i++)
+   for (int i = 0; i < sizeof(pointsShip) / sizeof(UI::PT); i++)
    {
       Point pt(center.getX() + pointsShip[i].x,
          center.getY() + pointsShip[i].y);
@@ -260,6 +242,24 @@ void drawXwing(const Point & center, int rotation, bool thrust)
    // draw the flame if necessary
    if (thrust)
    {
-      drawFlame(center, rotation);
+      UI::drawFlame(center, rotation);
    }
+}
+
+/******************************************************************
+ * DISPLAY
+ * Renders screen buffer to the screen
+ ****************************************************************/
+void display() {
+   auto output_coords = rasterize(UI::scene);
+
+   dac::update_buffer(std::move(output_coords));
+}
+
+/******************************************************************
+ * INIT
+ * Renders screen buffer to the screen
+ *****************************************************************/
+void init() {
+   dac::init_dac();
 }
