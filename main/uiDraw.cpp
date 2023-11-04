@@ -250,7 +250,7 @@ void UI::drawXwing(const Point & center, int rotation, bool thrust)
  * DISPLAY
  * Renders screen buffer to the screen
  ****************************************************************/
-void display() {
+void UI::display() {
    auto output_coords = rasterize(UI::scene);
 
    dac::update_buffer(std::move(output_coords));
@@ -260,6 +260,6 @@ void display() {
  * INIT
  * Renders screen buffer to the screen
  *****************************************************************/
-void init() {
+void UI::init() {
    dac::init_dac();
 }

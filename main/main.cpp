@@ -8,13 +8,13 @@
 #include <array>
 #include <thread>
 
-#include "point.h"
 #include "uiDraw.hpp"
 
 extern "C" void app_main(void)
 {
+    UI::init();
+
     while (true) {
-        UI::init();
         UI::drawMediumAsteroid(Point(0, 0), 0);
         UI::display();
     }

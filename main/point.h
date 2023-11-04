@@ -9,8 +9,7 @@
  ************************************************************************/
 
 
-#ifndef POINT_H
-#define POINT_H
+#pragma once
 
 #include <iostream>
 
@@ -44,5 +43,3 @@ private:
 // stream I/O useful for debugging
 std::ostream & operator << (std::ostream & out, const Point & pt);
 std::istream & operator >> (std::istream & in,        Point & pt);
-
-#endif // POINT_H

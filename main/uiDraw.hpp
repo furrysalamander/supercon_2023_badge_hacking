@@ -10,12 +10,9 @@
  *    (variables) or a mixture (objects)
  ************************************************************************/
 
-#ifndef UI_DRAW_H
-#define UI_DRAW_H
-
+#pragma once
 #include <cmath>      // for M_PI, sin() and cos()
 #include "point.h"    // Where things are drawn
-#include "primitives.hpp"
 
 #include "render.hpp"
 #include "rasterize.hpp"
@@ -96,8 +93,3 @@ namespace UI {
     ****************************************************************/
    void init();
 }
-
-
-
-
-#endif // UI_DRAW_H
