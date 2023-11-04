@@ -3,31 +3,25 @@
 
 namespace comp
 {
-    std::unique_ptr<dspm::Mat> rotation(float degrees) {
+    void rotation(float degrees, dspm::Mat& matrix) {
         const auto cos_d = cos(degrees);
         const auto sin_d = sin(degrees);
 
-        auto matrix = std::make_unique<dspm::Mat>(2, 2);
-        (*matrix)(0, 0) = cos_d;
-        (*matrix)(0, 1) = -sin_d;
-        (*matrix)(1, 0) = sin_d;
-        (*matrix)(1, 1) = cos_d;
+        matrix(0, 0) = cos_d;
+        matrix(0, 1) = -sin_d;
+        matrix(1, 0) = sin_d;
+        matrix(1, 1) = cos_d;
 
-        return matrix;
+        return;
     }
 
-    std::unique_ptr<dspm::Mat> scaling(float x, float y) {
-        auto matrix = std::make_unique<dspm::Mat>(2, 2);
-        (*matrix)(0, 0) = x;
-        (*matrix)(1, 1) = y;
-
-        return matrix;
+    void scaling(float x, float y, dspm::Mat& matrix) {
+        matrix(0, 0) = x;
+        matrix(1, 1) = y;
     }
 
-    std::unique_ptr<dspm::Mat> translation(float x, float y) {
-        auto matrix = std::make_unique<dspm::Mat>(2, 1);
-        (*matrix)(0, 0) = x;
-        (*matrix)(1, 0) = y;
-        return matrix;
+    void translation(float x, float y, dspm::Mat& matrix) {
+        matrix(0, 0) = x;
+        matrix(1, 0) = y;
     }
 }

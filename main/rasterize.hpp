@@ -58,10 +58,10 @@ std::unique_ptr<std::vector<uint8_t>> rasterize(std::vector<Shape>& elements) {
 
         // Make the points list circular
         shape.points.push_back(shape.points[0]);
-        std::printf("num_points: %d\n", shape.points.size());
+        // std::printf("num_points: %d\n", shape.points.size());
 
         for (size_t i = 0; i < shape.points.size() - 1; i++) {
-            std::printf("point 1: %f, %f point 2: %f, %f\n", shape.points[i](0, 0), shape.points[i](1, 0), shape.points[i+1](0, 0), shape.points[i+1](1, 0));
+            // std::printf("point 1: %f, %f point 2: %f, %f\n", shape.points[i](0, 0), shape.points[i](1, 0), shape.points[i+1](0, 0), shape.points[i+1](1, 0));
             BresenhamLineAlgorithm(shape.points[i](0, 0), shape.points[i](1, 0), shape.points[i+1](0, 0), shape.points[i+1](1, 0), *output_buffer);
         }
     }
