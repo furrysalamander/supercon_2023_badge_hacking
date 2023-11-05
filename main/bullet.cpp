@@ -11,8 +11,6 @@
 #include <iostream>
 using namespace std;
 
-#define BULLET_SPEED 10.0
-#define M_PI 3.141
 
 // default constructor
 Bullet::Bullet()
@@ -33,7 +31,7 @@ Bullet::Bullet(Point shipPoint, float angle, Velocity shipVel)
 // calls the uiDraw function to draw a bullet
 void Bullet::draw()
 {
-   drawDot(point);
+   UI::drawDot(point);
    if (!ttl--)
       kill();
 }

@@ -18,6 +18,7 @@
 
 #include <rtc_wdt.h>
 #include <esp_task_wdt.h>
+#include "rasterize.hpp"
 
 using namespace std;
 
@@ -100,13 +101,17 @@ void UI::drawDot(const Point & point)
    auto x = point.getX();
    auto y = point.getY();
 
-   Point points[] = {
-      {x,       y},
-      {x + 1,   y},
-      {x + 1,   y},
-      {x,       y}
+   const auto dot = Shape {
+      {
+         x,       y,
+         x + 1,   y,
+         x + 1,   y,
+         x,       y
+      }
    };
-   // TODO: insert points
+
+   UI::scene.push_back(dot);
+   UI::scene.back().scale(VECTORSCOPE_SCALE, VECTORSCOPE_SCALE);
 }
 
 /**********************************************************************
@@ -115,20 +120,18 @@ void UI::drawDot(const Point & point)
 void UI::drawSmallAsteroid( const Point & center, int rotation)
 {
    // ultra simple point
-   UI::PT points[] = 
+   const auto asteroid = Shape 
    {
-      {-5, 9},  {4, 8},   {8, 4},   
-      {8, -5},  {-2, -8}, {-2, -3}, 
-      {-8, -4}, {-8, 4},  {-5, 10}
+      {
+         -5, 9,  4, 8,   8, 4,   
+         8, -5,  -2, -8, -2, -3, 
+         -8, -4, -8, 4,  -5, 10
+      }
    };
-   
-   for (int i = 0; i < sizeof(points)/sizeof(UI::PT); i++)
-   {
-      Point pt(center.getX() + points[i].x, 
-               center.getY() + points[i].y);
-      rotate(pt, center, rotation);
-      // TODO: insert pt
-   }
+
+   UI::scene.push_back(asteroid);
+   UI::scene.back().scale(VECTORSCOPE_SCALE, VECTORSCOPE_SCALE);
+   UI::scene.back().rotate(rotation);
 }
 
 /**********************************************************************
@@ -143,13 +146,12 @@ void UI::drawMediumAsteroid( const Point & center, int rotation)
          6, 2,    12, -6,   2, -15,
          -6, -15, -14, -10, -15, 0,
          -4, 15,  2, 8
-      },
-      {}
+      }
    };
 
-   UI::scene.emplace_back(asteroid);
+   UI::scene.push_back(asteroid);
    UI::scene.back().scale(VECTORSCOPE_SCALE, VECTORSCOPE_SCALE);
-   UI::scene.back().rotate(rotation + UI::VECTORSCOPE_ROTATION);
+   UI::scene.back().rotate(rotation);
 }
 
 /**********************************************************************
@@ -158,21 +160,18 @@ void UI::drawMediumAsteroid( const Point & center, int rotation)
 void UI::drawLargeAsteroid( const Point & center, int rotation)
 {
    // ultra simple point
-   const UI::PT points[] = 
-   {
-      {0, 12},    {8, 20}, {16, 14},
-      {10, 12},   {20, 0}, {0, -20},
-      {-18, -10}, {-20, -2}, {-20, 14},
-      {-10, 20},  {0, 12}
+   const auto asteroid = Shape {
+      {
+         0, 12,    8, 20, 16, 14,
+         10, 12,   20, 0, 0, -20,
+         -18, -10, -20, -2, -20, 14,
+         -10, 20,  0, 1
+      }
    };
    
-   for (int i = 0; i < sizeof(points)/sizeof(UI::PT); i++)
-   {
-      Point pt(center.getX() + points[i].x, 
-               center.getY() + points[i].y);
-      rotate(pt, center, rotation);
-      // TODO: insert pt
-   }
+   UI::scene.push_back(asteroid);
+   UI::scene.back().scale(VECTORSCOPE_SCALE, VECTORSCOPE_SCALE);
+   UI::scene.back().rotate(rotation);
 }
 
 void UI::drawFlame(const Point & center, int rotation)
@@ -208,13 +207,12 @@ void UI::drawShip(const Point & center, int rotation, bool thrust)
    const auto ship = Shape {
       { // top   r.wing   r.engine l.engine  l.wing    top
          0, 6, 6, -6, 2, -3, -2, -3, -6, -6, 0, 6 
-      },
-      {}
+      }
    };
 
-   UI::scene.emplace_back(ship);
+   UI::scene.push_back(ship);
    UI::scene.back().scale(VECTORSCOPE_SCALE, VECTORSCOPE_SCALE);
-   UI::scene.back().rotate(rotation + UI::VECTORSCOPE_ROTATION);
+   UI::scene.back().rotate(rotation);
    
    // draw the flame if necessary
    // if (thrust)
@@ -231,25 +229,23 @@ void UI::drawShip(const Point & center, int rotation, bool thrust)
  *************************************************************************/
 void UI::drawXwing(const Point & center, int rotation, bool thrust)
 {
-   const UI::PT pointsShip[] =
-   { // tip >  < right wing  >  < right shooter >  <end right wing>
-      {0, 16}, {3, 0}, {10, 0}, {10, 8}, {10, -4}, {7, -4}, {7, -6}, {0, -5},
-      {-7, -6}, {-7, -4}, {-10, -4}, {-10, 8}, {-10, 0}, {-3, 0}, {0, 16}
+   const auto xwing = Shape {
+   // tip >  < right wing  >  < right shooter >  <end right wing>
+      {
+         0, 16, 3, 0, 10, 0, 10, 8, 10, -4, 7, -4, 7, -6, 0, -5,
+         -7, -6, -7, -4, -10, -4, -10, 8, -10, 0, -3, 0, 0, 16
+      }
    };
 
-   for (int i = 0; i < sizeof(pointsShip) / sizeof(UI::PT); i++)
-   {
-      Point pt(center.getX() + pointsShip[i].x,
-         center.getY() + pointsShip[i].y);
-      rotate(pt, center, rotation);
-      // TODO: insert pt into list
-   }
-
    // draw the flame if necessary
-   if (thrust)
-   {
-      UI::drawFlame(center, rotation);
-   }
+   // if (thrust)
+   // {
+   //    UI::drawFlame(center, rotation);
+   // }
+
+   UI::scene.push_back(xwing);
+   UI::scene.back().scale(VECTORSCOPE_SCALE, VECTORSCOPE_SCALE);
+   UI::scene.back().rotate(rotation);
 }
 
 /******************************************************************
@@ -260,6 +256,7 @@ void UI::display() {
    auto output_coords = rasterize(UI::scene);
 
    dac::update_buffer(std::move(output_coords));
+   UI::scene.clear();
    
    vTaskDelay(pdMS_TO_TICKS(16));
 }
@@ -269,5 +266,5 @@ void UI::display() {
  * Renders screen buffer to the screen
  *****************************************************************/
 void UI::init() {
-   dac::init_dac();
+   dac::init_oneshot_dac();
 }

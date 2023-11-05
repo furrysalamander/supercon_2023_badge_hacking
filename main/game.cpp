@@ -9,7 +9,7 @@
 
 #include "game.h"
 
-#include "uiDraw.h"
+#include "uiDraw.hpp"
 #include "uiInteract.h"
 #include "point.h"
 #include "flyingObject.h"
@@ -41,8 +41,8 @@ Game :: Game(Point tl, Point br)
       while (rockStart.getX() < 50 && rockStart.getX() > -50
          && rockStart.getY() < 50 && rockStart.getY() > -50)
       {
-         rockStart.setX(random(-WORLD_SIZE, WORLD_SIZE));
-         rockStart.setY(random(-WORLD_SIZE, WORLD_SIZE));
+         rockStart.setX(UI::random(-WORLD_SIZE, WORLD_SIZE));
+         rockStart.setY(UI::random(-WORLD_SIZE, WORLD_SIZE));
       }
       rocks.push_back(new BigRock);
       rocks[i]->setPoint(rockStart);
@@ -305,7 +305,7 @@ void Game::handleInput(const Interface & ui)
  * GAME :: DRAW
  * Draw everything on the screen
  *********************************************/
-void Game :: draw(const Interface & ui)
+void Game :: draw()
 {
    // Draw rocks if any are alive
    for (int i = 0; i < rocks.size(); i++)

@@ -12,11 +12,11 @@
 #ifndef GAME_H
 #define GAME_H
 
-#define WORLD_SIZE 300
+#define WORLD_SIZE 128
 
 #include <vector>
 
-#include "uiDraw.h"
+#include "uiDraw.hpp"
 #include "uiInteract.h"
 #include "point.h"
 #include "velocity.h"
@@ -57,7 +57,7 @@ public:
     * Function: draw
     * Description: draws everything for the game.
     *********************************************/
-   void draw(const Interface & ui);
+   void draw();
 
    /*********************************************
     * Function: reset

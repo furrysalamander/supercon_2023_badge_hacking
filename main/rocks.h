@@ -21,8 +21,6 @@
 
 #define ROCK_SPEED 1
 
-#define M_PI 3.141
-
 #include "flyingObject.h"
 
 
@@ -37,6 +35,7 @@ public:
    void setAngle(int angle) { this->angle = angle; }
    virtual vector<Rock*> hit() = 0;
    virtual void draw() = 0;
+   virtual ~Rock() = default;
 };
 
 //   BigRock

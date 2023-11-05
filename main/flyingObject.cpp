@@ -8,6 +8,7 @@
  *************************************************************/
 
 #include "flyingObject.h"
+#include "game.h"
 
 // default constructor setting the flying object to alive
 FlyingObject::FlyingObject()

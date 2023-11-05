@@ -8,7 +8,7 @@
 BigRock::BigRock()
 {
    radius = BIG_ROCK_SIZE;
-   setAngle(random(0, 360));
+   setAngle(UI::random(0, 360));
    velocity.setDx(ROCK_SPEED * (-sin(M_PI / 180.0 * getAngle())));
    velocity.setDy(ROCK_SPEED * (cos(M_PI / 180.0 * getAngle())));
 }
@@ -36,7 +36,7 @@ vector<Rock*> BigRock::hit()
 void BigRock::draw()
 {
    radius = BIG_ROCK_SIZE;
-   drawLargeAsteroid(point, rotation);
+   UI::drawLargeAsteroid(point, rotation);
    rotation += BIG_ROCK_SPIN;
 }
 
@@ -69,7 +69,7 @@ vector<Rock*> MediumRock::hit()
 void MediumRock::draw()
 {
    rotation += MEDIUM_ROCK_SPIN;
-   drawMediumAsteroid(point, rotation);
+   UI::drawMediumAsteroid(point, rotation);
 }
 
 /*************************
@@ -96,5 +96,5 @@ vector<Rock*> SmallRock::hit()
 void SmallRock::draw()
 {
    rotation += SMALL_ROCK_SPIN;
-   drawSmallAsteroid(point, rotation);
+   UI::drawSmallAsteroid(point, rotation);
 }

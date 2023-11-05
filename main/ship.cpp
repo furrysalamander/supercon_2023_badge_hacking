@@ -1,7 +1,5 @@
 #include "ship.h"
 
-#define M_PI 3.141
-
 // Put your ship methods here
 Ship::Ship()
 {
@@ -20,8 +18,8 @@ Ship::Ship(Point point)
 
 void Ship::draw()
 {
-   drawShip(point, rotation, thrust);
-   // drawXwing(point, rotation, thrust);
+   UI::drawShip(point, rotation, thrust);
+   // UI::drawXwing(point, rotation, thrust);
 }
 
 void Ship::rotate(int rotation)

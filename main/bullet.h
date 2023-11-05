@@ -15,7 +15,7 @@
 #define BULLET_LIFE 60
 
 #include "flyingObject.h"
-#include "uiDraw.h"
+#include "uiDraw.hpp"
 
 class Bullet : public FlyingObject
 {

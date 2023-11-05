@@ -13,9 +13,8 @@
 
 #include "point.h"
 #include "velocity.h"
-#include "uiDraw.h"
+#include "uiDraw.hpp"
 
-#define WORLD_SIZE 127
 
 #include <vector>
 using namespace std;
@@ -32,6 +31,7 @@ protected:
 public:
    FlyingObject();
    FlyingObject(Point point);
+   virtual ~FlyingObject() = default;
    Point getPoint() const { return point; }
    Velocity getVelocity() const { return velocity; }
    bool isAlive() const { return alive; }
@@ -51,5 +51,6 @@ public:
    void setRadius(float radius) { this->radius = radius; }
    void stayInWorld();
 };
+
 
 #endif
