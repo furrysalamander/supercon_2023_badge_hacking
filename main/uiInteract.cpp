@@ -141,7 +141,6 @@ void Interface::keyEvent(Button button, bool fDown)
          isUpPress = fDown;
          break;
       case RANGE:
-      case ' ':
          isSpacePress = fDown;
          break;
    }

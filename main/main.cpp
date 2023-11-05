@@ -6,10 +6,11 @@
 extern "C" void app_main(void)
 {
     UI::init();
-    auto rotation = 0;
+    auto rotation = 0.1;
     while (true) {
-        rotation += 1;
-        UI::drawMediumAsteroid(Point(0, 0), rotation);
+        rotation += 0.1;
+        UI::drawMediumAsteroid(Point(0, 0), -rotation);
+        UI::drawShip(Point(0, 0), rotation);
         UI::display();
     }
 }

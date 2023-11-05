@@ -19,6 +19,9 @@
 #include "assets.hpp"
 
 namespace UI {
+   extern const float VECTORSCOPE_SCALE;
+   extern const float VECTORSCOPE_ROTATION;
+
    // Globally available scene
    extern std::vector<Shape> scene;
 

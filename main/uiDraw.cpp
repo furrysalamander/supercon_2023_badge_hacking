@@ -25,6 +25,9 @@ using namespace std;
 
 std::vector<Shape> UI::scene = std::vector<Shape>();
 
+const float UI::VECTORSCOPE_SCALE = 0.007;
+const float UI::VECTORSCOPE_ROTATION = -90;
+
 /************************************************************************
  * ROTATE
  * Rotate a given point (point) around a given origin (center) by a given
@@ -144,7 +147,9 @@ void UI::drawMediumAsteroid( const Point & center, int rotation)
       {}
    };
 
-   UI::scene.emplace_back(primitives::square).rotate(rotation);
+   UI::scene.emplace_back(asteroid);
+   UI::scene.back().scale(VECTORSCOPE_SCALE, VECTORSCOPE_SCALE);
+   UI::scene.back().rotate(rotation + UI::VECTORSCOPE_ROTATION);
 }
 
 /**********************************************************************
@@ -200,24 +205,22 @@ void UI::drawShip(const Point & center, int rotation, bool thrust)
 {
    
    // draw the ship                                                 
-   const UI::PT pointsShip[] = 
-   { // top   r.wing   r.engine l.engine  l.wing    top
-      {0, 6}, {6, -6}, {2, -3}, {-2, -3}, {-6, -6}, {0, 6}  
+   const auto ship = Shape {
+      { // top   r.wing   r.engine l.engine  l.wing    top
+         0, 6, 6, -6, 2, -3, -2, -3, -6, -6, 0, 6 
+      },
+      {}
    };
-   
-   for (int i = 0; i < sizeof(pointsShip)/sizeof(UI::PT); i++)
-   {
-      Point pt(center.getX() + pointsShip[i].x, 
-               center.getY() + pointsShip[i].y);
-      rotate(pt, center, rotation);
-      // TODO: insert pt into list
-   }
 
+   UI::scene.emplace_back(ship);
+   UI::scene.back().scale(VECTORSCOPE_SCALE, VECTORSCOPE_SCALE);
+   UI::scene.back().rotate(rotation + UI::VECTORSCOPE_ROTATION);
+   
    // draw the flame if necessary
-   if (thrust)
-   {
-      UI::drawFlame(center, rotation);
-   }
+   // if (thrust)
+   // {
+   //    UI::drawFlame(center, rotation);
+   // }
 }
 
 /************************************************************************
