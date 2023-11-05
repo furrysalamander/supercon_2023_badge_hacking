@@ -19,7 +19,7 @@
 #define MEDIUM_ROCK_SPIN 5
 #define SMALL_ROCK_SPIN 10
 
-#define ROCK_SPEED 1
+#define ROCK_SPEED 0.5
 
 #include "flyingObject.h"
 

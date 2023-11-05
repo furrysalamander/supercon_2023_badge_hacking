@@ -17,9 +17,13 @@
 #ifndef UI_INTERFACE_H
 #define UI_INTERFACE_H
 
- #include "point.h"
- #include "buttons.h"
+#include "point.h"
+#include "buttons.h"
  
+#define GPIO_FORWARD GPIO_NUM_35
+#define GPIO_RIGHT GPIO_NUM_39
+#define GPIO_SHOOT GPIO_NUM_36
+#define GPIO_LEFT GPIO_NUM_34
 
 /********************************************
  * INTERFACE
@@ -31,13 +35,13 @@ class Interface
 public:
    // Default constructor useful for setting up the random variables
    // or for opening the file for output
-   Interface() { initialize(0, 0x0000, "Window", Point(-50, 50), Point(50, -50)); };
+   Interface() { initialize("Window", Point(-50, 50), Point(50, -50)); };
 
    // Constructor if you want to set up the window with anything but
    // the default parameters
-   Interface(int argc, char ** argv, const char * title, Point topLeft, Point bottomRight)
+   Interface(const char * title, Point topLeft, Point bottomRight)
    {
-      initialize(argc, argv, title, topLeft, bottomRight);
+      initialize(title, topLeft, bottomRight);
    }
    
    // Destructor, incase any housecleaning needs to occr
@@ -56,12 +60,13 @@ public:
    unsigned int getNextTick() { return nextTick; };
 
    // How many frames per second are we configured for?
-   void setFramesPerSecond(double value);
+   void setFramesPerSecond(float value);
    
    // Key event indicating a key has been pressed or not.  The callbacks
    // should be the only onces to call this
    void keyEvent(Button key, bool fDown);
    void keyEvent();
+   void checkButtons();
 
    // Current frame rate
    double frameRate() const { return timePeriod;   };
@@ -77,8 +82,7 @@ public:
    static void *p;                   // for client
    static void (*callBack)(const Interface *, void *);
 
-private:
-   void initialize(int argc, char ** argv, const char * title, Point topLeft, Point bottomRight);
+   void initialize(const char * title, Point topLeft, Point bottomRight);
 
    static bool         initialized;  // only run the constructor once!
    static double       timePeriod;   // interval between frame draws
@@ -89,6 +93,7 @@ private:
    static int  isLeftPress;          //    "   left       "
    static int  isRightPress;         //    "   right      "
    static bool isSpacePress;         //    "   space      "
+   // static bool stillSpace;           //    "   space      "
    static bool isEscapePress;        //    "   escape     "
 };
 

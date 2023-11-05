@@ -15,6 +15,10 @@
 #include "flyingObject.h"
 #include <iostream>
 
+#include <rtc_wdt.h>
+#include <esp_task_wdt.h>
+
+
 #include <vector>
 
 // These are needed for the getClosestDistance function...
@@ -290,10 +294,13 @@ void Game::handleInput(const Interface & ui)
    }
 
    // shoot a bullet from ship with it's properties
-   if (ui.isSpace())
+   if (ui.isSpace() && /* !ui.stillSpace */ true)
    {
       Bullet * newBullet = new Bullet(ship->getPoint(), ship->getRotation(), ship->getVelocity());
       bullets.push_back(newBullet);
+      // ui.stillSpace = true;
+   } else { // reset bullet
+      // ui.stillSpace = false;
    }
 
    if (ui.isEscape()) {
@@ -340,6 +347,7 @@ void Game :: draw()
    
    drawNumber(scoreLocation, score);
    */
+   vTaskDelay(pdMS_TO_TICKS(1000/30));
 }
 
 /*********************************************

@@ -11,10 +11,10 @@
 #ifndef ship_h
 #define ship_h
 
-#define SHIP_SIZE 6
+#define SHIP_SIZE 7
 
 #define ROTATE_AMOUNT 6
-#define THRUST_AMOUNT 0.5
+#define THRUST_AMOUNT 0.1
 
 #include "flyingObject.h"
 

@@ -16,8 +16,6 @@
 
 #include "uiDraw.hpp"
 
-#include <rtc_wdt.h>
-#include <esp_task_wdt.h>
 #include "rasterize.hpp"
 
 using namespace std;
@@ -259,8 +257,6 @@ void UI::display() {
 
    dac::update_buffer(std::move(output_coords));
    UI::scene.clear();
-   
-   vTaskDelay(pdMS_TO_TICKS(1000/30));
 }
 
 /******************************************************************

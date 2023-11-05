@@ -15,7 +15,10 @@
 #include <cassert>    // I feel the need... the need for asserts
 #include <time.h>     // for clock
 #include <cstdlib>    // for rand()
+#include <driver/gpio.h>
 
+#include <rtc_wdt.h>
+#include <esp_task_wdt.h>
 
 #include "uiInteract.h"
 #include "point.h"
@@ -33,6 +36,8 @@ using namespace std;
 void sleep(unsigned long msSleep)
 {
    // TODO: find esp32 sleep
+   
+   vTaskDelay(pdMS_TO_TICKS(msSleep));
    return;
 }
 
@@ -52,7 +57,7 @@ void drawCallback()
    Interface ui;
    // Prepare the background buffer for drawing
    // TODO: clear the screen? Maybe I don't need to
-   
+
    //calls the client's display function
    assert(ui.callBack != NULL);
    ui.callBack(&ui, ui.p);
@@ -113,6 +118,15 @@ void keyboardCallback(Button button, int x, int y)
    // so we are actually getting the same version as in the constructor.
    Interface ui;
    ui.keyEvent(button, true /*fDown*/);
+}
+
+void checkButtons() {  
+   Interface::isLeftPress = (int)!gpio_get_level(GPIO_LEFT);
+   Interface::isRightPress = (int)!gpio_get_level(GPIO_RIGHT);
+   Interface::isSpacePress = (int)!gpio_get_level(GPIO_SHOOT);
+   Interface::isUpPress = (int)!gpio_get_level(GPIO_FORWARD);
+
+   std::printf("%d, %d, %d, %d\n", Interface::isLeftPress, Interface::isRightPress, Interface::isSpacePress, Interface::isUpPress);
 }
 
 /***************************************************************
@@ -193,7 +207,7 @@ void Interface::setNextDrawTime()
  * to 30 frames/second but the client can set this at will.
  *    INPUT  value        The number of frames per second.  30 is default
  *************************************************************************/
-void Interface::setFramesPerSecond(double value)
+void Interface::setFramesPerSecond(float value)
 {
     timePeriod = (1 / value);
 }
@@ -234,7 +248,7 @@ Interface::~Interface()
  *           argv:       The actual command-line parameters
  *           title:      The text for the titlebar of the window
  *************************************************************************/
-void Interface::initialize(int argc, char ** argv, const char * title, Point topLeft, Point bottomRight)
+void Interface::initialize(const char * title, Point topLeft, Point bottomRight)
 {
    if (initialized)
       return;

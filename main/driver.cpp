@@ -36,7 +36,7 @@ int main(int argc, char ** argv)
    Point bottomRight(WORLD_SIZE, -WORLD_SIZE);
    Game game(topLeft, bottomRight);
 
-   Interface ui(argc, argv, "Asteroids", topLeft, bottomRight);
+   Interface ui("Asteroids", topLeft, bottomRight);
    ui.run(callBack, &game);
    
    return 0;

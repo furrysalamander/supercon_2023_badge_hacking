@@ -10,9 +10,10 @@ set(srcs
     "bullet.cpp"
     "rocks.cpp"
     "ship.cpp"
+    "uiInteract.cpp"
 )
 
 set(dirs ".")
 
-idf_component_register(SRCS "${srcs}"
+idf_component_register(SRCS "driver.cpp" "uiInteract.cpp" "${srcs}"
                     INCLUDE_DIRS "${dirs}")
