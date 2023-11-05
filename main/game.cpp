@@ -294,13 +294,13 @@ void Game::handleInput(const Interface & ui)
    }
 
    // shoot a bullet from ship with it's properties
-   if (ui.isSpace() && /* !ui.stillSpace */ true)
+   if (ui.isSpace() && !ui.stillSpace)
    {
       Bullet * newBullet = new Bullet(ship->getPoint(), ship->getRotation(), ship->getVelocity());
       bullets.push_back(newBullet);
-      // ui.stillSpace = true;
+      ui.stillSpace = true;
    } else { // reset bullet
-      // ui.stillSpace = false;
+      ui.stillSpace = false;
    }
 
    if (ui.isEscape()) {

@@ -223,6 +223,7 @@ int          Interface::isLeftPress   = 0;
 int          Interface::isRightPress  = 0;
 bool         Interface::isEscapePress = false;
 bool         Interface::isSpacePress  = false;
+bool         Interface::stillSpace    = false;
 bool         Interface::initialized   = false;
 double       Interface::timePeriod    = 1.0 / 30; // default to 30 frames/second
 unsigned int Interface::nextTick      = 0;        // redraw now please

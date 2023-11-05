@@ -93,7 +93,7 @@ public:
    static int  isLeftPress;          //    "   left       "
    static int  isRightPress;         //    "   right      "
    static bool isSpacePress;         //    "   space      "
-   // static bool stillSpace;           //    "   space      "
+   static bool stillSpace;           //    "   space      "
    static bool isEscapePress;        //    "   escape     "
 };
 
