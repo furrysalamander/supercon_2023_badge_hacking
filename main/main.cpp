@@ -15,6 +15,13 @@ extern "C" void app_main(void)
     // Set up the display rendering thread
     UI::init();
     std::thread render_thread(dac::render_thread);
+
+    for (auto shape : UI::scene) {
+        for (auto point : shape.points) {
+            std::printf("{%f, %f}", point[0], point[1]);
+        }
+        std::printf("\n");
+    }
     
     while (true) {
         game.advance();

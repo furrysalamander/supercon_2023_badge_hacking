@@ -1,6 +1,8 @@
 #pragma once
 
 #include <vector>
+#include <math.h>
+
 template<typename T>
 constexpr std::vector<float> linspace(T start_in, T end_in, int num_in)
 {
@@ -26,4 +28,8 @@ constexpr std::vector<float> linspace(T start_in, T end_in, int num_in)
   linspaced.push_back(end); // I want to ensure that start and end
                             // are exactly the same as the input
   return linspaced;
+}
+
+constexpr float deg_to_rad(float x) {
+  return x * M_PI / 180.0f;
 }

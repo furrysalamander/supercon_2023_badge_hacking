@@ -22,7 +22,7 @@
 
 using namespace std;
 
-#define deg2rad(value) ((M_PI / 180) * (value))
+#define deg2rad(value) ((M_PI / 180.0f) * (value))
 
 std::vector<Shape> UI::scene = std::vector<Shape>();
 
@@ -111,7 +111,6 @@ void UI::drawDot(const Point & point)
    };
 
    UI::scene.push_back(dot);
-   UI::scene.back().scale(VECTORSCOPE_SCALE, VECTORSCOPE_SCALE);
 }
 
 /**********************************************************************
@@ -130,8 +129,8 @@ void UI::drawSmallAsteroid( const Point & center, int rotation)
    };
 
    UI::scene.push_back(asteroid);
-   UI::scene.back().scale(VECTORSCOPE_SCALE, VECTORSCOPE_SCALE);
-   UI::scene.back().rotate(rotation);
+   UI::scene.back().rotate(deg2rad(rotation));
+   UI::scene.back().translate(center.getX(), center.getY());
 }
 
 /**********************************************************************
@@ -150,8 +149,8 @@ void UI::drawMediumAsteroid( const Point & center, int rotation)
    };
 
    UI::scene.push_back(asteroid);
-   UI::scene.back().scale(VECTORSCOPE_SCALE, VECTORSCOPE_SCALE);
-   UI::scene.back().rotate(rotation);
+   UI::scene.back().rotate(deg2rad(rotation));
+   UI::scene.back().translate(center.getX(), center.getY());
 }
 
 /**********************************************************************
@@ -170,8 +169,8 @@ void UI::drawLargeAsteroid( const Point & center, int rotation)
    };
    
    UI::scene.push_back(asteroid);
-   UI::scene.back().scale(VECTORSCOPE_SCALE, VECTORSCOPE_SCALE);
-   UI::scene.back().rotate(rotation);
+   UI::scene.back().rotate(deg2rad(rotation));
+   UI::scene.back().translate(center.getX(), center.getY());
 }
 
 void UI::drawFlame(const Point & center, int rotation)
@@ -211,8 +210,8 @@ void UI::drawShip(const Point & center, int rotation, bool thrust)
    };
 
    UI::scene.push_back(ship);
-   UI::scene.back().scale(VECTORSCOPE_SCALE, VECTORSCOPE_SCALE);
-   UI::scene.back().rotate(rotation);
+   UI::scene.back().rotate(deg2rad(rotation));
+   UI::scene.back().translate(center.getX(), center.getY());
    
    // draw the flame if necessary
    // if (thrust)
@@ -244,8 +243,8 @@ void UI::drawXwing(const Point & center, int rotation, bool thrust)
    // }
 
    UI::scene.push_back(xwing);
-   UI::scene.back().scale(VECTORSCOPE_SCALE, VECTORSCOPE_SCALE);
-   UI::scene.back().rotate(rotation);
+   UI::scene.back().rotate(deg2rad(rotation));
+   UI::scene.back().translate(center.getX(), center.getY());
 }
 
 /******************************************************************
@@ -253,12 +252,15 @@ void UI::drawXwing(const Point & center, int rotation, bool thrust)
  * Renders screen buffer to the screen
  ****************************************************************/
 void UI::display() {
+   for(auto& object : UI::scene) {
+      object.scale(VECTORSCOPE_SCALE, VECTORSCOPE_SCALE);
+   }
    auto output_coords = rasterize(UI::scene);
 
    dac::update_buffer(std::move(output_coords));
    UI::scene.clear();
    
-   vTaskDelay(pdMS_TO_TICKS(16));
+   vTaskDelay(pdMS_TO_TICKS(1000/30));
 }
 
 /******************************************************************
