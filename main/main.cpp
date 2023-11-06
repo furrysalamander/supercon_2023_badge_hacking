@@ -25,6 +25,9 @@ extern "C" void app_main(void)
     // Get the interface ready
     Interface ui("Asteroids", topLeft, bottomRight);
 
+    // Draw the first frame on the screen
+    game.draw();
+
     // Hold game until we start shooting or launching
     while (!(Interface::isSpacePress || Interface::isUpPress)) {
         Interface::isSpacePress = !(int)gpio_get_level(GPIO_SHOOT);

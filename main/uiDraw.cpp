@@ -171,6 +171,26 @@ void UI::drawLargeAsteroid( const Point & center, int rotation)
    UI::scene.back().translate(center.getX(), center.getY());
 }
 
+// ORIGINAL
+// void UI::drawFlame(const Point & center, int rotation)
+// {
+//    const UI::PT pointsFlame[3][5] =
+//    {
+//       { {-2, -3}, {-2, -13}, { 0, -6}, { 2, -13}, {2, -3} },
+//       { {-2, -3}, {-4,  -9}, {-1, -7}, { 1, -14}, {2, -3} },
+//       { {-2, -3}, {-1, -14}, { 1, -7}, { 4,  -9}, {2, -3} }
+//    };
+   
+//    int iFlame = UI::random(0, 3);
+//    for (int i = 0; i < 5; i++)
+//    {
+//       Point pt(center.getX() + pointsFlame[iFlame][i].x, 
+//                center.getY() + pointsFlame[iFlame][i].y);
+//       rotate(pt, center, rotation);
+//       // TODO: insert pt into list
+//    }
+// }
+
 void UI::drawFlame(const Point & center, int rotation)
 {
    const UI::PT pointsFlame[3][5] =
@@ -183,13 +203,17 @@ void UI::drawFlame(const Point & center, int rotation)
    int iFlame = UI::random(0, 3);
    for (int i = 0; i < 5; i++)
    {
-      Point pt(center.getX() + pointsFlame[iFlame][i].x, 
-               center.getY() + pointsFlame[iFlame][i].y);
-      rotate(pt, center, rotation);
-      // TODO: insert pt into list
+      const auto flamePt = Shape {
+         {
+            center.getX() + pointsFlame[iFlame][i].x,
+            center.getY() + pointsFlame[iFlame][i].y
+         }
+      };
+      
+      UI::scene.push_back(flamePt);
+      UI::scene.back().rotate(deg2rad(rotation));
    }
 }
-
 
 /************************************************************************       
  * DRAW Ship                                                                    
@@ -212,10 +236,10 @@ void UI::drawShip(const Point & center, int rotation, bool thrust)
    UI::scene.back().translate(center.getX(), center.getY());
    
    // draw the flame if necessary
-   // if (thrust)
-   // {
-   //    UI::drawFlame(center, rotation);
-   // }
+   if (thrust)
+   {
+      UI::drawFlame(center, rotation);
+   }
 }
 
 /************************************************************************
@@ -235,10 +259,10 @@ void UI::drawXwing(const Point & center, int rotation, bool thrust)
    };
 
    // draw the flame if necessary
-   // if (thrust)
-   // {
-   //    UI::drawFlame(center, rotation);
-   // }
+   if (thrust)
+   {
+      UI::drawFlame(center, rotation);
+   }
 
    UI::scene.push_back(xwing);
    UI::scene.back().rotate(deg2rad(rotation));
