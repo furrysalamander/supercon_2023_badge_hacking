@@ -14,7 +14,7 @@
 #define SHIP_SIZE 7
 
 #define ROTATE_AMOUNT 6
-#define THRUST_AMOUNT 0.1
+#define THRUST_AMOUNT 0.05
 
 #include "flyingObject.h"
 

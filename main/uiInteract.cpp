@@ -125,8 +125,6 @@ void checkButtons() {
    Interface::isRightPress = (int)!gpio_get_level(GPIO_RIGHT);
    Interface::isSpacePress = (int)!gpio_get_level(GPIO_SHOOT);
    Interface::isUpPress = (int)!gpio_get_level(GPIO_FORWARD);
-
-   std::printf("%d, %d, %d, %d\n", Interface::isLeftPress, Interface::isRightPress, Interface::isSpacePress, Interface::isUpPress);
 }
 
 /***************************************************************

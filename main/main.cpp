@@ -24,14 +24,20 @@ extern "C" void app_main(void)
 
     // Get the interface ready
     Interface ui("Asteroids", topLeft, bottomRight);
+
+    // Hold game until we start shooting or launching
+    while (!(Interface::isSpacePress || Interface::isUpPress)) {
+        Interface::isSpacePress = !(int)gpio_get_level(GPIO_SHOOT);
+        Interface::isUpPress = !(int)gpio_get_level(GPIO_FORWARD);
+    }
     
     // Run game loop
     while (true) {
         game.advance();
-        Interface::isLeftPress = (int)!gpio_get_level(GPIO_LEFT);
-        Interface::isRightPress = (int)!gpio_get_level(GPIO_RIGHT);
-        Interface::isSpacePress = (int)!gpio_get_level(GPIO_SHOOT);
-        Interface::isUpPress = (int)!gpio_get_level(GPIO_FORWARD);
+        Interface::isLeftPress = !(int)gpio_get_level(GPIO_LEFT);
+        Interface::isRightPress = !(int)gpio_get_level(GPIO_RIGHT);
+        Interface::isSpacePress = !(int)gpio_get_level(GPIO_SHOOT);
+        Interface::isUpPress = !(int)gpio_get_level(GPIO_FORWARD);
         game.handleInput(ui);
         game.draw();
         UI::display();
