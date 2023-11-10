@@ -193,26 +193,17 @@ void UI::drawLargeAsteroid( const Point & center, int rotation)
 
 void UI::drawFlame(const Point & center, int rotation)
 {
-   const UI::PT pointsFlame[3][5] =
+   const vector<float> pointsFlame[] =
    {
-      { {-2, -3}, {-2, -13}, { 0, -6}, { 2, -13}, {2, -3} },
-      { {-2, -3}, {-4,  -9}, {-1, -7}, { 1, -14}, {2, -3} },
-      { {-2, -3}, {-1, -14}, { 1, -7}, { 4,  -9}, {2, -3} }
+      { -2.0f, -3.0f, -2.0f, -13.0f, 0.0f, -6.0f,  2.0f, -13.0f, 2.0f, -3.0f },
+      { -2.0f, -3.0f, -4.0f, -9.0f, -1.0f, -7.0f, 1.0f, -14.0f, 2.0f, -3.0f },
+      { -2.0f, -3.0f, -1.0f, -14.0f, 1.0f, -7.0f, 4.0f,  -9.0f, 2.0f, -3.0f }
    };
    
    int iFlame = UI::random(0, 3);
-   for (int i = 0; i < 5; i++)
-   {
-      const auto flamePt = Shape {
-         {
-            center.getX() + pointsFlame[iFlame][i].x,
-            center.getY() + pointsFlame[iFlame][i].y
-         }
-      };
-      
-      UI::scene.push_back(flamePt);
-      UI::scene.back().rotate(deg2rad(rotation));
-   }
+   UI::scene.emplace_back(pointsFlame[iFlame]);
+   UI::scene.back().rotate(deg2rad(rotation));
+   UI::scene.back().translate(center.getX(), center.getY());
 }
 
 /************************************************************************       
