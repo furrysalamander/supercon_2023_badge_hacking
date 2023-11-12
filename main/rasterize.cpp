@@ -2,6 +2,10 @@
 
 #include <vector>
 #include <memory>
+
+#include <dsps_addc.h>
+#include <dsps_mulc.h>
+
 #include <render.hpp>
 
 const auto MIN_COORD = 0;
@@ -19,15 +23,7 @@ void BresenhamLineAlgorithm(int32_t x1, int32_t y1, int32_t x2, int32_t y2, std:
     while (true) {
         // This could be made more efficient by just skipping until points are on the screen
         if (x1 >= MIN_COORD && x1 <= MAX_COORD && y1 >= MIN_COORD && y1 <= MAX_COORD) {
-            // std::printf("x: %ld, y: %ld\n", x1, y1);
-            // std::printf("%ld", x1);
-            // output.push_back(x1);
-            // output.push_back(y1);
             output.push_back({static_cast<uint8_t>(x1), static_cast<uint8_t>(y1)});
-            output.push_back({static_cast<uint8_t>(x1), static_cast<uint8_t>(y1)});
-            output.push_back({static_cast<uint8_t>(x1), static_cast<uint8_t>(y1)});
-            // dac::output_coord({static_cast<uint8_t>(x1), static_cast<uint8_t>(y1)});
-            // break;
         }
 
         if (x1 == x2 && y1 == y2) break;
@@ -57,12 +53,24 @@ std::unique_ptr<std::vector<std::array<uint8_t, 2>>> rasterize(std::vector<Shape
             // tmp_c = shape.points[segment[1]*2];
             // tmp_d = shape.points[segment[1]*2 + 1];
 
-        for (auto& point : shape.points) {
-            for (auto& coord : point) {
-                coord += 1;
-                coord *= 128;
-            }
-        }
+        dsps_addc_f32(
+            reinterpret_cast<float*>(shape.points.data()),
+            reinterpret_cast<float*>(shape.points.data()),
+            shape.points.size()*2,
+            1,
+            1,
+            1
+            );
+
+        dsps_mulc_f32(
+            reinterpret_cast<float*>(shape.points.data()),
+            reinterpret_cast<float*>(shape.points.data()),
+            shape.points.size()*2,
+            128,
+            1,
+            1
+            );
+
 
         // Make the points list circular
         shape.points.push_back(shape.points[0]);

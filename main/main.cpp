@@ -14,8 +14,7 @@ extern "C" void app_main(void)
     Game game(topLeft, bottomRight);
 
     // Set up the display rendering thread
-    UI::init();
-    std::thread render_thread(dac::render_thread);
+    dac::init_continuous_dac();
 
     gpio_set_direction(GPIO_LEFT, GPIO_MODE_INPUT);
     gpio_set_direction(GPIO_RIGHT, GPIO_MODE_INPUT);
